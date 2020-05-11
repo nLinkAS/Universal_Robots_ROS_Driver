@@ -77,6 +77,8 @@ HardwareInterface::HardwareInterface()
   , pausing_state_(PausingState::RUNNING)
   , pausing_ramp_up_increment_(0.01)
   , controllers_initialized_(false)
+  , robot_status_program_running_(TriState::UNKNOWN)
+  , robot_status_program_running_pub_initial(true)
 {
 }
 
@@ -429,6 +431,10 @@ bool HardwareInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw
       new realtime_tools::RealtimePublisher<ur_dashboard_msgs::RobotMode>(robot_hw_nh, "robot_mode", 1, true));
   safety_mode_pub_.reset(
       new realtime_tools::RealtimePublisher<ur_dashboard_msgs::SafetyMode>(robot_hw_nh, "safety_mode", 1, true));
+
+  robot_status_program_running_pub_.reset(
+    new realtime_tools::RealtimePublisher<std_msgs::Bool>(robot_hw_nh, "robot_status_program_running", 1, true));
+
 
   // Set the speed slider fraction used by the robot's execution. Values should be between 0 and 1.
   // Only set this smaller than 1 if you are using the scaled controllers (as by default) or you know what you're
@@ -1014,6 +1020,8 @@ void HardwareInterface::extractRobotStatus()
     robot_status_resource_.motion_possible = TriState::FALSE;
   }
 
+  robot_status_program_running_ = robot_status_bits_[toUnderlying(UrRtdeRobotStatusBits::IS_PROGRAM_RUNNING)] ? TriState::TRUE : TriState::FALSE;
+
   // the error code, if any, is not transmitted by this protocol
   // it can and should be fetched separately
   robot_status_resource_.error_code = 0;
@@ -1237,6 +1245,18 @@ void HardwareInterface::publishRobotAndSafetyMode()
         safety_mode_pub_->unlockAndPublish();
       }
     }
+  }
+
+  if (robot_status_program_running_pub_){
+      bool value = robot_status_program_running_ == TriState::TRUE;
+      if(robot_status_program_running_pub_->msg_.data != value || robot_status_program_running_pub_initial){
+          if (robot_status_program_running_pub_->trylock())
+          {
+              robot_status_program_running_pub_->msg_.data = value;
+              robot_status_program_running_pub_->unlockAndPublish();
+              robot_status_program_running_pub_initial = false;
+          }
+      }
   }
 }
 
