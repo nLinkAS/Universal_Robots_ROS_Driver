@@ -86,6 +86,7 @@ void RobotStateHelper::safetyModeCallback(const ur_dashboard_msgs::SafetyMode& m
     if (!is_started_)
     {
       startActionServer();
+    }
   }
 }
 
