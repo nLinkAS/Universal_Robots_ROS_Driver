@@ -268,6 +268,10 @@ protected:
   industrial_robot_status_interface::RobotStatus robot_status_resource_{};
   industrial_robot_status_interface::IndustrialRobotStatusInterface robot_status_interface_{};
 
+  std::unique_ptr<realtime_tools::RealtimePublisher<std_msgs::Bool>> robot_status_program_running_pub_;
+  bool robot_status_program_running_pub_initial;
+  industrial_robot_status_interface::TriState robot_status_program_running_;
+
   uint32_t runtime_state_;
   bool position_controller_running_;
   bool velocity_controller_running_;
