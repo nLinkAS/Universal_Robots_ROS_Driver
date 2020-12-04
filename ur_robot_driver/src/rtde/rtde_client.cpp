@@ -95,7 +95,7 @@ bool RTDEClient::negotiateProtocolVersion(const uint16_t protocol_version)
   std::unique_ptr<RTDEPackage> package;
   while (num_retries < MAX_REQUEST_RETRIES)
   {
-    if (!pipeline_.getLatestProduct(package, std::chrono::milliseconds(1000)))
+    if (!pipeline_.getLatestProduct(package, std::chrono::milliseconds(10000)))
     {
       throw UrException("No answer to RTDE protocol version negotiation request was received from robot. This should "
                         "not "
