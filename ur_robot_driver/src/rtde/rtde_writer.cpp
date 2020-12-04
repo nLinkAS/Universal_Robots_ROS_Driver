@@ -61,6 +61,11 @@ void RTDEWriter::run()
   LOG_DEBUG("Write thread ended.");
 }
 
+bool RTDEWriter::isRunning()
+{
+  return running_;
+}
+
 bool RTDEWriter::sendSpeedSlider(double speed_slider_fraction)
 {
   std::unique_ptr<DataPackage> package;
