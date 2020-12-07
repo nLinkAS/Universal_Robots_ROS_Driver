@@ -63,11 +63,11 @@
 
   <!-- spawn controller manager -->
   <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="$(arg controllers)" />
+    output="screen" args="$(arg controllers) --timeout 9999999" />
 
   <!-- load other controller -->
   <node name="ros_control_stopped_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="--stopped $(arg stopped_controllers)" />
+    output="screen" args="--stopped $(arg stopped_controllers) --timeout 9999999" />
 
 
   <node name="controller_stopper" pkg="controller_stopper" type="node" respawn="false" output="screen">
