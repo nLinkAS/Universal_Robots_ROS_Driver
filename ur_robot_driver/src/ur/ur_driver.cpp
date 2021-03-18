@@ -74,7 +74,7 @@ ur_driver::UrDriver::UrDriver(const std::string& robot_ip, const std::string& sc
   checkCalibration(calibration_checksum);
 
   non_blocking_read_ = non_blocking_read;
-  get_packet_timeout_ = non_blocking_read_ ? 0 : 100;
+  get_packet_timeout_ = non_blocking_read_ ? 0 : 2000;
 
   if (!rtde_client_->init())
   {
