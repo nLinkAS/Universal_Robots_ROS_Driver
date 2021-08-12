@@ -34,9 +34,10 @@
   <arg name="servoj_lookahead_time" default="0.03" doc="Specify lookahead time for servoing to position in joint space. A longer lookahead time can smooth the trajectory."/>
   <arg name="ur_hardware_interface_node_required" default="true" doc="Shut down ros environment if ur_hardware_interface-node dies."/>
   <arg name="use_spline_interpolation" default="true" doc="True if splines should be used as interpolation on the robot controller when forwarding trajectory, if false movej or movel commands are used"/>
+  <arg name="ur_hardware_interface_node_respawn" default="false" doc="Restart (after 30 second delay) ur_hardware_interface-node if it dies."/>
 
   <!-- Load hardware interface -->
-  <node name="ur_hardware_interface" pkg="ur_robot_driver" type="ur_robot_driver_node" output="screen" launch-prefix="$(arg launch_prefix)" required="$(arg ur_hardware_interface_node_required)">
+  <node name="ur_hardware_interface" pkg="ur_robot_driver" type="ur_robot_driver_node" output="screen" launch-prefix="$(arg launch_prefix)" required="$(arg ur_hardware_interface_node_required)" respawn="$(arg ur_hardware_interface_node_respawn)" respawn_delay="30">
     <param name="robot_ip" type="str" value="$(arg robot_ip)"/>
     <param name="reverse_ip" value="$(arg reverse_ip)"/>
     <param name="reverse_port" type="int" value="$(arg reverse_port)"/>
