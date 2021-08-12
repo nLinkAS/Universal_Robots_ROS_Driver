@@ -27,9 +27,11 @@
   <arg name="tool_device_name" default="/tmp/ttyUR" doc="Local device name used for tool communication. Only used, when `use_tool_communication` is set to true."/>
   <arg name="tool_tcp_port" default="54321" doc="Port on which the robot controller publishes the tool comm interface. Only used, when `use_tool_communication` is set to true."/>
   <arg name="headless_mode" default="false" doc="Automatically send URScript to robot to execute. On e-Series this does require the robot to be in 'remote-control' mode. With this, the URCap is not needed on the robot."/>
+  <arg name="ur_hardware_interface_node_required" default="true" doc="Shut down ros environment if ur_hardware_interface-node dies."/>
+  <arg name="ur_hardware_interface_node_respawn" default="false" doc="Restart (after 30 second delay) ur_hardware_interface-node if it dies."/>
 
   <!-- Load hardware interface -->
-  <node name="ur_hardware_interface" pkg="ur_robot_driver" type="ur_robot_driver_node" output="screen" launch-prefix="$(arg launch_prefix)" required="true">
+  <node name="ur_hardware_interface" pkg="ur_robot_driver" type="ur_robot_driver_node" output="screen" launch-prefix="$(arg launch_prefix)" required="$(arg ur_hardware_interface_node_required)" respawn="$(arg ur_hardware_interface_node_respawn)" respawn_delay="30">
     <param name="robot_ip" type="str" value="$(arg robot_ip)"/>
     <param name="reverse_port" type="int" value="$(arg reverse_port)"/>
     <param name="script_sender_port" type="int" value="$(arg script_sender_port)"/>
