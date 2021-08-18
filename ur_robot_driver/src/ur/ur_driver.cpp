@@ -84,7 +84,7 @@ ur_driver::UrDriver::UrDriver(const std::string& robot_ip, const std::string& sc
   rtde_frequency_ = rtde_client_->getMaxFrequency();
   servoj_time_ = 1.0 / rtde_frequency_;
 
-  std::string local_ip = rtde_client_->getIP();
+  local_ip_ = rtde_client_->getIP();
 
   std::string prog = readScriptFile(script_file);
   while (prog.find(JOINT_STATE_REPLACE) != std::string::npos)
@@ -101,7 +101,7 @@ ur_driver::UrDriver::UrDriver(const std::string& robot_ip, const std::string& sc
 
   while (prog.find(SERVER_IP_REPLACE) != std::string::npos)
   {
-    prog.replace(prog.find(SERVER_IP_REPLACE), SERVER_IP_REPLACE.length(), local_ip);
+    prog.replace(prog.find(SERVER_IP_REPLACE), SERVER_IP_REPLACE.length(), local_ip_);
   }
 
   while (prog.find(SERVER_PORT_REPLACE) != std::string::npos)
@@ -146,7 +146,7 @@ ur_driver::UrDriver::UrDriver(const std::string& robot_ip, const std::string& sc
   }
   else
   {
-    script_sender_.reset(new comm::ScriptSender(script_sender_port, prog));
+    script_sender_.reset(new comm::ScriptSender(local_ip_, script_sender_port, prog));
     script_sender_->start();
     LOG_DEBUG("Created script sender");
   }
@@ -204,7 +204,7 @@ bool UrDriver::stopControl()
 void UrDriver::startWatchdog()
 {
   handle_program_state_(false);
-  reverse_interface_.reset(new comm::ReverseInterface(reverse_port_));
+  reverse_interface_.reset(new comm::ReverseInterface(local_ip_, reverse_port_));
   reverse_interface_active_ = true;
   LOG_DEBUG("Created reverse interface");
 
@@ -230,7 +230,7 @@ void UrDriver::startWatchdog()
     // TODO: It would probably make sense to keep the same instance alive for the complete runtime
     // instead of killing it all the time.
     reverse_interface_->~ReverseInterface();
-    reverse_interface_.reset(new comm::ReverseInterface(reverse_port_));
+    reverse_interface_.reset(new comm::ReverseInterface(local_ip_, reverse_port_));
     reverse_interface_active_ = true;
   }
 }
