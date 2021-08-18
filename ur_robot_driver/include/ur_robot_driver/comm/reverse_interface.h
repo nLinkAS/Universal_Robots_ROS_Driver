@@ -60,9 +60,10 @@ public:
   /*!
    * \brief Creates a ReverseInterface object including a URServer.
    *
+   * \param local_ip IP address the Server is started on
    * \param port Port the Server is started on
    */
-  ReverseInterface(uint32_t port) : server_(port)
+  ReverseInterface(std::string local_ip, uint32_t port) : server_(local_ip, port)
   {
     if (!server_.bind())
     {

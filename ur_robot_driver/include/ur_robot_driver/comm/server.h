@@ -41,6 +41,7 @@ namespace comm
 class URServer : private comm::TCPSocket
 {
 private:
+  std::string local_ip_;
   int port_;
   comm::TCPSocket client_;
 
@@ -51,9 +52,10 @@ public:
   /*!
    * \brief Creates a URServer object with a given port.
    *
+   * \param local_ip IP address the server is started on
    * \param port The port to open a socket on
    */
-  URServer(int port);
+  URServer(std::string local_ip, int port);
   /*!
    * \brief Closes the socket to allow for destruction of the object.
    */

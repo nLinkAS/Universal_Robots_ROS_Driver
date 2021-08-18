@@ -47,10 +47,11 @@ public:
   /*!
    * \brief Creates a ScriptSender object, including a new URServer and not yet started thread.
    *
+   * \param local_ip IP address the server is started on
    * \param port Port to start the server on
    * \param program Program to send to the robot upon request
    */
-  ScriptSender(uint32_t port, const std::string& program) : server_(port), script_thread_(), program_(program)
+  ScriptSender(std::string local_ip, uint32_t port, const std::string& program) : server_(local_ip, port), script_thread_(), program_(program)
   {
     if (!server_.bind())
     {

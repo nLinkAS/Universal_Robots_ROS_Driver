@@ -224,6 +224,7 @@ private:
   std::function<void(bool)> handle_program_state_;
 
   std::string robot_ip_;
+  std::string local_ip_;
   bool in_headless_mode_;
   std::string full_robot_program_;
 

@@ -31,7 +31,7 @@ namespace ur_driver
 {
 namespace comm
 {
-URServer::URServer(int port) : port_(port)
+URServer::URServer(std::string local_ip, int port) : local_ip_(local_ip), port_(port)
 {
 }
 
@@ -66,8 +66,7 @@ bool URServer::open(int socket_fd, struct sockaddr* address, size_t address_len)
 
 bool URServer::bind()
 {
-  std::string empty;
-  bool res = TCPSocket::setup(empty, port_);
+  bool res = TCPSocket::setup(local_ip_, port_);
 
   if (!res)
     return false;
