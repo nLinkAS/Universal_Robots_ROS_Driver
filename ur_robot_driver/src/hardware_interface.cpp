@@ -1022,7 +1022,7 @@ void HardwareInterface::extractRobotStatus()
     robot_status_resource_.motion_possible = TriState::FALSE;
   }
 
-  robot_status_program_running_ = robot_status_bits_[toUnderlying(UrRtdeRobotStatusBits::IS_PROGRAM_RUNNING)] ? TriState::TRUE : TriState::FALSE;
+  robot_status_program_running_ = robot_status_bits_[urcl::toUnderlying(rtde::UrRtdeRobotStatusBits::IS_PROGRAM_RUNNING)] ? TriState::TRUE : TriState::FALSE;
 
   // the error code, if any, is not transmitted by this protocol
   // it can and should be fetched separately
